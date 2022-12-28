@@ -12,58 +12,22 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # python: [
-        #   # { version: '3.7', abi: 'cp37-cp37m' },
-        #   # { version: '3.8', abi: 'cp38-cp38' },
-        #   # { version: '3.9', abi: 'cp39-cp39' },
-        #   # { version: '3.10', abi: 'cp310-cp310' },
-        #   # { version: '3.11', abi: 'cp311-cp311' },
-        # ]
-        # target: [
-        #   { arch: 'arm-unknown-linux-gnueabihf' },
-        # ]
         target: [
           arm-unknown-linux-gnueabihf
          ]
     steps:
     - uses: actions/checkout@v2
-    # - name: Build Wheels
-    #   uses: PyO3/maturin-action@v1
-    #   env:
-    #     PYO3_CROSS_LIB_DIR: "/opt/python/${{ matrix.python.abi }}"
-    #     # CFLAGS: "-Os -fno-plt -flto=thin"
-    #     # LDFLAGS: "-Os -flto=thin -Wl,--as-needed"
-    #     # RUSTFLAGS: "-C opt-level=s"
-    #     # CARGO_UNSTABLE_SPARSE_REGISTRY: "true"
-    #     # ORJSON_DISABLE_YYJSON: "true"
-
-    #   with:
-    #     maturin-version: v0.14.1
-    #     target: ${{ matrix.target }}
-    #     rust-toolchain: nightly
-    #     manylinux: auto
-    #     args: --release --strip --out dist -i python${{ matrix.python.version }}
     - name: Build Wheels
       uses: uraimo/run-on-arch-action@v2
-      # env:
-      #   PYO3_CROSS_LIB_DIR: /opt/python/${{ matrix.python.abi }}
       with:
         arch: armv6
         distro: bullseye
         githubToken: ${{ github.token }}
         install: |
           apt-get update
-          # apt-get install -y --no-install-recommends software-properties-common
-          # add-apt-repository ppa:deadsnakes/ppa
-          # apt-get update
-          # apt-get install -y curl python${{ matrix.python.version }}-dev python${{ matrix.python.version }}-venv
           apt-get install -y python3 python3-dev python3-pip libatomic1
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly-2022-11-20 -y
           source "$HOME/.cargo/env"
           pip install maturin
-          # rustup toolchain install nightly
-          # rustup default nightly
-          rustup target add ${{ matrix.target }}
-          # maturin build --release --strip --out dist -i python${{ matrix.python.version }} --target ${{ matrix.target }}
-          maturin build --release --strip --out dist --target ${{ matrix.target }}
+          CARGO_NET_GIT_FETCH_WITH_CLI=true maturin build --release --strip --out dist --target ${{ matrix.target }}
