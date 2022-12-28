@@ -53,7 +53,10 @@ jobs:
         githubToken: ${{ github.token }}
         install: |
           apt-get update
-          apt-get install -y curl python${{ matrix.python.version }}-dev #python${{ matrix.python.version }}-venv
+          apt-get install -y --no-install-recommends software-properties-common
+          add-apt-repository ppa:deadsnakes/ppa
+          apt-get update
+          apt-get install -y curl python${{ matrix.python.version }}-dev python${{ matrix.python.version }}-venv
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly
           pip install maturin
