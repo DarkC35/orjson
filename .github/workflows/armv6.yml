@@ -5,6 +5,7 @@ on:
       - '*'
     tags:
       - '*'
+  workflow_dispatch:
 jobs:
   linux-armv6:
     runs-on: ubuntu-22.04
