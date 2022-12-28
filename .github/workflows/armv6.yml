@@ -40,6 +40,6 @@ jobs:
       with:
         maturin-version: v0.14.1
         target: ${{ matrix.target }}
-        rust-toolchain: nightly
+        rust-toolchain: nightly-arm-unknown-linux-gnueabihf
         manylinux: auto
         args: --release --strip --out dist -i python${{ matrix.python.version }}
