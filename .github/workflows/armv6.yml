@@ -60,6 +60,7 @@ jobs:
           apt-get install -y python3 python3-dev python3-pip
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly -y
+          source "$HOME/.cargo/env"
           pip install maturin
           # rustup toolchain install nightly
           # rustup default nightly
