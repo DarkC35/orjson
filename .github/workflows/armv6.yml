@@ -49,7 +49,7 @@ jobs:
         PYO3_CROSS_LIB_DIR: /opt/python/${{ matrix.python.abi }}
       with:
         arch: armv6
-        distro: ubuntu20.04
+        distro: bullseye
         githubToken: ${{ github.token }}
         install: |
           apt-get update
